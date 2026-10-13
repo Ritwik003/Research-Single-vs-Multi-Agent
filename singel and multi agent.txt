@@ -1,0 +1,48 @@
+"""
+=============================================================================
+ MULTI-AGENT SYSTEM  (Manager + Sub-agents, each with a tool)
+ LangChain / Mistral via Ollama
+=============================================================================
+
+Architecture
+------------
+        User query
+            |
+        [ MANAGER ]  <- Mistral reads the query and picks ONE sub-agent
+            |
+   ---------+-----------------
+   |            |            |
+[SEARCH]     [SCRAPE]     [ANSWER]     <- sub-agents
+ +web         +web         (no tool,
+  search       scraper      just the model)
+
+Why routing is done this way
+----------------------------
+Local Mistral is UNRELIABLE at emitting structured tool-calls (we saw the
+single agent print tool calls as text instead of running them). So instead
+of trusting the model to emit tool-call JSON, the MANAGER only has to output
+ONE WORD (SEARCH / SCRAPE / ANSWER) -- something Mistral does reliably -- and
+the CODE guarantees the chosen tool actually runs. This is a real
+manager -> sub-agent design that is honest about the local model's limits.
+
+Every model call is token-counted so this can be compared against the single
+agent AT EQUAL COMPUTE (the research question).
+=============================================================================
+"""
+
+
+"""
+=============================================================================
+ SINGLE AGENT WITH TOOLS  (LangChain, Mistral via Ollama)
+=============================================================================
+
+This is the LangChain agent pattern (like the OpenAI example you found),
+but adapted to:
+   - run on your LOCAL Mistral (Ollama) instead of paid OpenAI
+   - use YOUR project's real tools: web search + page extraction
+   - COUNT TOKENS on every model call (needed for the research)
+
+The agent decides ON ITS OWN when to call a tool. That is what makes it a
+real "agent with tools" and not just a chatbot.
+=============================================================================
+"""

@@ -1,0 +1,11 @@
+
+Failure mode	What it is	Why a better model does not fix it
+Tool explosion	Selection accuracy collapses as the tool count grows	More tools means more plausibly-correct wrong choices, regardless of model
+State drift	The agent acts on a world state that changed mid-run	The model cannot know about a mutation it never observed
+Context window collapse	Early instructions decay out of effective attention	A larger window delays the collapse; it does not prevent it
+Latency cascade	Sequential tool hops compound into long-tail latency	Faster tokens do not remove the round-trip count
+Cost runaway	Token spend grows super-linearly with retries and context	A pricier model makes the same runaway more expensive
+
+
+
+Plan a 5 day Thailand trip with flights, hotels and sightseeing under 1.5 lakhs
